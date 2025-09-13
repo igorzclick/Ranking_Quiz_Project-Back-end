@@ -2,6 +2,7 @@ from flask import Flask, render_template, session
 from config import Config
 from models.db import db
 from controllers import player_controller, game_controller, question_controller, guess_controller
+from models.player import Player
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -16,7 +17,7 @@ app.add_url_rule("/game/<int:game_id>/question", "add_question", question_contro
 app.add_url_rule("/game/<int:game_id>/guess", "make_guess", guess_controller.make_guess, methods=["POST"])
     
 @app.route("/result/<int:game_id>/<int:player_id>")
-def result(game_id, player_id):
+def result(game_id, player_id): 
     from models.game import Game
     from models.player import player
     game = Game.query.get_or_404(game_id)
