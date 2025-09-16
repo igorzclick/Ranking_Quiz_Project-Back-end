@@ -1,7 +1,7 @@
 from src.config.data_base import db
 
 class Player(db.Model):
-    __tablename__ = 'sellers'
+    __tablename__ = 'players'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
