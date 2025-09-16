@@ -1,0 +1,22 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Ignorar todas as pastas __pycache__
+__pycache__/
+*/__pycache__/
+**/__pycache__/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+.venv*/
+venv*/
+
+# Environment variables
+.env
+
+db/
