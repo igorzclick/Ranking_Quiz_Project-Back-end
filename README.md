@@ -1,149 +1,267 @@
-# 📦 Gestão de Estoque para Mini Mercados
+# 🎮 Think Fast - API de Jogadores
 
-## 📌 Objetivo
-Desenvolver um sistema para gestão de estoque e vendas de mini mercados, garantindo segurança, controle de acesso e gestão eficiente de produtos e vendas.
+## 📌 Sobre o Projeto
 
----
+Think Fast é uma API para gerenciamento de jogadores, permitindo cadastro, autenticação e operações relacionadas a jogadores. O sistema utiliza autenticação JWT para proteger rotas e garantir a segurança das operações.
 
-## 🚀 Funcionalidades Principais
+## 🚀 Funcionalidades Atuais
 
-### 1️⃣ Cadastro de Mini Mercado (Player)
-Os mini mercados devem se cadastrar informando os seguintes campos:
-- **Nome**
-- **CNPJ**
-- **E-mail**
-- **Celular**
-- **Senha**
-- **Status** (Padrão: Inativo)
+### 1️⃣ Cadastro de Jogadores
 
-#### 🔹 Fluxo de Ativação do Player:
-1. Após o cadastro, um código de 4 dígitos é enviado via **WhatsApp (Twilio)** para o player.
-2. O player deve inserir o código recebido para ativar sua conta.
-3. Somente sellers ativados podem fazer login e gerenciar produtos.
+- Registro de novos jogadores com username, email e senha
+- Validação de dados para evitar duplicidade
 
----
+### 2️⃣ Autenticação
 
-### 2️⃣ Autenticação do Player
-- O sistema deve utilizar **JWT** ou **OAuth** para autenticação.
-- Sellers inativados não podem fazer login.
+- Login com username ou email
+- Geração de tokens JWT (access token e refresh token)
+- Proteção de rotas com autenticação
 
----
+### 3️⃣ Gerenciamento de Jogadores
 
-### 3️⃣ Gerenciamento de Produtos
-Um player autenticado pode:
-- **Cadastrar produtos** com os seguintes campos:
-  - Nome
-  - Preço
-  - Quantidade
-  - Status (Ativo/Inativo)
-  - Imagem
-- **Listar produtos** cadastrados
-- **Editar produto**
-- **Ver detalhes de um produto**
-- **Inativar produtos**
+- Listagem de jogadores
+- Busca de jogador por ID
+- Atualização de dados do jogador
+- Remoção de jogador
 
-**Regras:**
-- O player só pode visualizar e gerenciar seus próprios produtos.
+## 🛠️ Tecnologias Utilizadas
 
----
+- Python
+- Flask
+- SQLAlchemy
+- Flask-JWT-Extended
+- APIFlask
 
-### 4️⃣ Venda de Produtos
-- O player pode realizar uma venda informando:
-  - Produto
-  - Quantidade
-- As vendas devem ser armazenadas na tabela `Vendas`, contendo:
-  - ID do Produto
-  - Quantidade vendida
-  - Preço do produto no momento da venda
+## ⚙️ Instalação e Configuração
 
-**Regras:**
-- Não é possível vender mais do que a quantidade disponível em estoque.
-- Produtos inativados não podem ser vendidos.
-- Sellers inativos não podem realizar vendas.
+### Pré-requisitos
 
----
+- Python 3.8+
+- pip (gerenciador de pacotes Python)
+
+### Passos para Instalação
+
+1. Clone o repositório:
+
+```bash
+git clone https://github.com/seu-usuario/think-fast.git
+cd think-fast
+```
+
+2. Instale as dependências:
+
+```bash
+pip install -r requirements.txt
+```
+
+3. Configure as variáveis de ambiente (crie um arquivo .env baseado no .env.example):
+
+```
+JWT_SECRET_KEY=sua_chave_secreta
+JWT_ACCESS_TOKEN_EXPIRES=3600
+```
+
+4. Execute a aplicação:
+
+```bash
+python run.py
+```
 
 ## 📡 Endpoints da API
 
-### 1️⃣ Cadastro e Ativação do Player
-- **Criar Player**
-  ```bash
-  curl -X POST "http://localhost:8080/api/sellers" \
-       -H "Content-Type: application/json" \
-       -d '{"nome": "Mini Mercado X", "cnpj": "00.000.000/0001-00", "email": "mercado@email.com", "celular": "+559999999999", "senha": "123456"}'
-  ```
-- **Ativar Player via WhatsApp (Twilio)**
-  ```bash
-  curl -X POST "http://localhost:8080/api/sellers/activate" \
-       -H "Content-Type: application/json" \
-       -d '{"celular": "+559999999999", "codigo": "1234"}'
-  ```
+### Cadastro e Autenticação
 
-### 2️⃣ Autenticação
-- **Login**
-  ```bash
-  curl -X POST "http://localhost:8080/api/auth/login" \
-       -H "Content-Type: application/json" \
-       -d '{"email": "mercado@email.com", "senha": "123456"}'
-  ```
+#### Cadastro de Jogador
 
-### 3️⃣ Gerenciamento de Produtos
-- **Cadastrar Produto**
-  ```bash
-  curl -X POST "http://localhost:8080/api/products" \
-       -H "Authorization: Bearer SEU_TOKEN" \
-       -H "Content-Type: application/json" \
-       -d '{"nome": "Arroz", "preco": 10.50, "quantidade": 100, "status": "Ativo", "img": "url_da_imagem"}'
-  ```
-- **Listar Produtos**
-  ```bash
-  curl -X GET "http://localhost:8080/api/products" \
-       -H "Authorization: Bearer SEU_TOKEN"
-  ```
-- **Editar Produto**
-  ```bash
-  curl -X PUT "http://localhost:8080/api/products/1" \
-       -H "Authorization: Bearer SEU_TOKEN" \
-       -H "Content-Type: application/json" \
-       -d '{"nome": "Arroz Integral", "preco": 12.00, "quantidade": 50, "status": "Ativo"}'
-  ```
-- **Ver Detalhes de um Produto**
-  ```bash
-  curl -X GET "http://localhost:8080/api/products/1" \
-       -H "Authorization: Bearer SEU_TOKEN"
-  ```
-- **Inativar Produto**
-  ```bash
-  curl -X PATCH "http://localhost:8080/api/products/1/inactivate" \
-       -H "Authorization: Bearer SEU_TOKEN"
-  ```
+- **Endpoint**: `/player/register`
+- **Método**: `POST`
+- **Corpo da Requisição**:
 
-### 4️⃣ Realizar Venda
-- **Criar Venda**
-  ```bash
-  curl -X POST "http://localhost:8080/api/sales" \
-       -H "Authorization: Bearer SEU_TOKEN" \
-       -H "Content-Type: application/json" \
-       -d '{"produtoId": 1, "quantidade": 2}'
-  ```
+```json
+{
+    **"username": "jogador1",**
 
----
+    **"email": "jogador1@exemplo.com",**
 
-## 🛠️ Tecnologias Utilizadas
-- **Back-end:** Kotlin + Spring Boot
-- **Front-end:** React.js
-- **Banco de Dados:** MySQL ou PostgreSQL
-- **Autenticação:** JWT ou OAuth
-- **Mensageria:** Twilio (para envio do código de ativação no WhatsApp)
+    **"password": "senha123"**
 
----
+}
+```
 
-## 📊 Dashboard e Relatórios
-- Implementação de um painel para exibição de relatórios e análise de vendas.
-- Monitoramento de estoque em tempo real.
+- **Resposta de Sucesso**:
 
----
+```json
+{
+    **"message": "Player created successfully"**
 
-## 📌 Considerações Finais
-Este projeto fornece um sistema completo para mini mercados gerenciarem seus estoques e vendas com segurança e eficiência. 🚀
+}
+```
 
+#### Login
+
+- **Endpoint**: `/auth/login`
+- **Método**: `POST`
+- **Corpo da Requisição**:
+
+```json
+{
+    **"username": "jogador1",**
+
+    **"password": "senha123"**
+
+}
+```
+
+ou
+
+```json
+{
+    **"username": "jogador1@exemplo.com",**
+
+    **"password": "senha123"**
+
+}
+```
+
+- **Resposta de Sucesso**:
+
+```json
+{
+    **"message": "Login successful",**
+
+    **"access\_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",**
+
+    **"refresh\_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."**
+
+}
+```
+
+### Rotas Protegidas (Requerem Autenticação)
+
+#### Listar Todos os Jogadores
+
+- **Endpoint**: `/player`
+- **Método**: `GET`
+- **Cabeçalho**: `Authorization: Bearer {access\_token}`
+- **Resposta de Sucesso**:
+
+```json
+{
+    **"players": \[**
+
+      **{**
+
+        **"id": 1,**
+
+        **"username": "jogador1",**
+
+        **"email": "jogador1@exemplo.com"**
+
+      **},**
+
+      **{**
+
+        **"id": 2,**
+
+        **"username": "jogador2",**
+
+        **"email": "jogador2@exemplo.com"**
+
+      **}**
+
+    **]**
+
+}
+```
+
+#### Obter Jogador por ID
+
+- **Endpoint**: `/player/{id}`
+- **Método**: `GET`
+- **Cabeçalho**: `Authorization: Bearer {access\_token}`
+- **Resposta de Sucesso**:
+
+```json
+{
+    **"player": {**
+
+      **"id": 1,**
+
+      **"username": "jogador1",**
+
+      **"email": "jogador1@exemplo.com"**
+
+    **}**
+
+}
+```
+
+#### Atualizar Jogador
+
+- **Endpoint**: `/player/{id}`
+- **Método**: `PUT`
+- **Cabeçalho**: `Authorization: Bearer {access\_token}`
+- **Corpo da Requisição**:
+
+```json
+{
+    **"username": "jogador1\_atualizado",**
+
+    **"email": "jogador1\_novo@exemplo.com"**
+
+}
+```
+
+- **Resposta de Sucesso**:
+
+```json
+{
+    **"message": "Player updated successfully"**
+
+}
+```
+
+#### Excluir Jogador
+
+- **Endpoint**: `/player/{id}`
+- **Método**: `DELETE`
+- **Cabeçalho**: `Authorization: Bearer {access\_token}`
+- **Resposta de Sucesso**:
+
+```json
+{
+    **"message": "Player deleted successfully"**
+
+}
+```
+
+#### Atualizar Token
+
+- **Endpoint**: `/auth/refresh`
+- **Método**: `POST`
+- **Cabeçalho**: `Authorization: Bearer {refresh\_token}`
+- **Resposta de Sucesso**:
+
+```json
+{
+    **"access\_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."**
+
+}
+```
+
+## 🔒 Autenticação
+
+O sistema utiliza autenticação JWT (JSON Web Token). Para acessar rotas protegidas:
+
+1. Faça login para obter o token de acesso
+2. Inclua o token no cabeçalho das requisições:
+
+```
+Authorization: Bearer {seu_token_aqui}
+```
+
+## 📝 Observações
+
+- Senhas são armazenadas em texto puro no momento (em um ambiente de produção, seria necessário implementar hash de senhas)
+- O login pode ser feito tanto com username quanto com email
+- Tokens de acesso expiram conforme configuração (padrão: 1 hora)
