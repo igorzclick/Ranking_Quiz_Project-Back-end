@@ -13,9 +13,9 @@ def create_app():
  
     app = APIFlask(__name__)
     # Configure Flask-JWT-Extended
-    app.config["JWT_SECRET_KEY"] = "grupinho_2.0"
+    app.config["JWT_SECRET_KEY"] = JWTConfig.SECRET_KEY
     app.config["JWT_ALGORITHM"] = "HS256"
-    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = 3600
+    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = JWTConfig.ACCESS_TOKEN_EXPIRES
     jwt = JWTManager(app)
 
     init_db(app)

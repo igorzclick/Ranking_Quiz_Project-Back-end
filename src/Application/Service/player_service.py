@@ -8,15 +8,13 @@ class PlayerService:
         new_player = player.to_dict()
         try:
 
-            if Player.query.filter_by(email=new_player.email).first():
+            if Player.query.filter_by(email=new_player['email']).first():
                 return None, "Email already registered"
-            if Player.query.filter_by(username=new_player.username).first():
+            if Player.query.filter_by(username=new_player['username']).first():
                 return None, "Username already registered"
             
             player = Player(
-                username=new_player.username,
-                email=new_player.email,
-                password=new_player.password
+                **new_player
             )
 
             db.session.add(player)
@@ -50,20 +48,20 @@ class PlayerService:
         try:
             player = Player.query.filter_by(id=id).first()
 
-            player_by_email = Player.query.filter_by(email=new_player.email).first()
+            player_by_email = Player.query.filter_by(email=new_player['email']).first()
             if player_by_email != None and player_by_email.id != player.id:
                 return None, "Email already registered"
-            
-            player_by_username = Player.query.filter_by(username=new_player.username).first()
+
+            player_by_username = Player.query.filter_by(username=new_player['username']).first()
             if player_by_username != None and player_by_username.id != player.id:
                 return None, "Username already registered"
 
             if not player:
                 return None, "Player not found"
-            
-            player.username = new_player.username
-            player.email = new_player.email
-    
+
+            player.username = new_player['username']
+            player.email = new_player['email']
+
             db.session.commit()
             return player, None
         except Exception as e:

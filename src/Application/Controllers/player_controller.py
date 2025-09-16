@@ -6,7 +6,7 @@ class PlayerController:
     @staticmethod
     def register_player(body):
         playerDomain = PlayerDomain(
-            username=body['name'],
+            username=body['nickname'],
             email=body['email'],
             password=body['password']
         )

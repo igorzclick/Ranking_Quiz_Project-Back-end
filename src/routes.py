@@ -2,12 +2,11 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from src.Application.Controllers.auth_controller import AuthController
 from src.Application.Controllers.player_controller import PlayerController
 from flask import jsonify, make_response, request
-from src.Application.Dto.player_dto import PlayerRegisterSchema
+from src.Application.Dto.player_dto import player_schema
+from src.Application.Dto.auth_dto import auth_schema
 from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token
 from src.Infrastructure.Model.player_model import Player
 from src.config.data_base import db
-
-
 
 def init_routes(app):    
     @app.route('/api', methods=['GET'])
@@ -16,14 +15,18 @@ def init_routes(app):
             "mensagem": "API - OK; Docker - Up",
         }), 200)
     
-    @app.route('/auth/login', methods=['POST'])
+    @app.route('/login', methods=['POST'])
     def login():
-        return AuthController.login()
+        data = request.get_json()
+        errors = auth_schema.validate(data)
+        if errors:
+            return make_response(jsonify(errors), 400)
+        return AuthController.login(data)
     
     @app.route('/player/register', methods=['POST'])
     def register_player():
         data = request.get_json()
-        errors = PlayerRegisterSchema().validate(data)
+        errors = player_schema().validate(data)
         if errors:
             return make_response(jsonify(errors), 400)
         return PlayerController.register_player(data)
