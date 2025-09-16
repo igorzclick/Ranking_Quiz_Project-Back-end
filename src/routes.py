@@ -15,7 +15,7 @@ def init_routes(app):
             "mensagem": "API - OK; Docker - Up",
         }), 200)
     
-    @app.route('/login', methods=['POST'])
+    @app.route('/auth/login', methods=['POST'])
     def login():
         data = request.get_json()
         errors = auth_schema.validate(data)
