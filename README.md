@@ -44,7 +44,7 @@ Think Fast é uma API para gerenciamento de jogadores, permitindo cadastro, aute
 1. Clone o repositório:
 
 ```bash
-git clone https://github.com/seu-usuario/think-fast.git
+git clone https://github.com/igorzclick/Ranking_Quiz_Project-Back-end.git
 cd think-fast
 ```
 
