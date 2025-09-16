@@ -20,5 +20,5 @@ mysqlclient==2.2.4
 SQLAlchemy==2.0.43
 flask-jwt-extended==4.7.1
 twilio
-
-
+dotenv
+flask_cors

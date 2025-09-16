@@ -6,6 +6,7 @@ from src.routes import init_routes
 from src.config.jwt_config import JWTConfig
 from flask_jwt_extended import JWTManager
 from dotenv import load_dotenv
+from flask_cors import CORS
 
 # carregar o dotenv
 load_dotenv()
@@ -16,6 +17,7 @@ def create_app():
     """
  
     app = APIFlask(__name__)
+    CORS(app, resources={r"/*": {"origins": "*"}})
     # configuração Flask-JWT-Extended
     app.config["JWT_SECRET_KEY"] = JWTConfig.SECRET_KEY
     app.config["JWT_ALGORITHM"] = "HS256"
