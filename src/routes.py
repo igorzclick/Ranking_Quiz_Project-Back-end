@@ -26,7 +26,7 @@ def init_routes(app):
     @app.route('/player/register', methods=['POST'])
     def register_player():
         data = request.get_json()
-        errors = player_schema().validate(data)
+        errors = player_schema.validate(data)
         if errors:
             return make_response(jsonify(errors), 400)
         return PlayerController.register_player(data)
@@ -58,4 +58,3 @@ def init_routes(app):
     @jwt_required(refresh=True)
     def refresh():
         return jsonify(access_token=create_access_token(identity=get_jwt_identity()))
-    
