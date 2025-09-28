@@ -22,6 +22,10 @@ def create_app():
     app.config["JWT_SECRET_KEY"] = JWTConfig.SECRET_KEY
     app.config["JWT_ALGORITHM"] = "HS256"
     app.config["JWT_ACCESS_TOKEN_EXPIRES"] = JWTConfig.ACCESS_TOKEN_EXPIRES
+    app.config["JWT_REFRESH_TOKEN_EXPIRES"] = JWTConfig.REFRESH_TOKEN_EXPIRES
+    app.config["JWT_TOKEN_LOCATION"] = ["headers", "cookies"]
+    app.config["JWT_HEADER_NAME"] = "Authorization"
+    app.config["JWT_HEADER_TYPE"] = "Bearer"
     jwt = JWTManager(app)
 
     init_db(app)

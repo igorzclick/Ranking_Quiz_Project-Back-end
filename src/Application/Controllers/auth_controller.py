@@ -6,11 +6,11 @@ class AuthController:
     @staticmethod
     def login(body):
         authDomain = AuthDomain(
-            username=body['nickname'],
+            username=body['username'],
             password=body['password']
         ).to_dict()
         
-        token, error, code = AuthService.login(authDomain)
+        result, error, code = AuthService.login(authDomain)
         
         if(error):
             return make_response(jsonify({
@@ -19,5 +19,6 @@ class AuthController:
 
         return make_response(jsonify({
             "message": "Login successful",
-            "access_token": token,
+            "access_token": result["access_token"],
+            "refresh_token": result["refresh_token"]
         }), code)
