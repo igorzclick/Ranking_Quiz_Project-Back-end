@@ -80,5 +80,4 @@ class ThemeController:
 
         return make_response(jsonify({
             "message": "Theme deleted successfully",
-            "theme": theme.to_dict()
         }), 200)
