@@ -1,7 +1,7 @@
 from flask import jsonify, make_response
 from src.Infrastructure.Model.player_model import Player
 from src.config.data_base import db
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, create_refresh_token
 
 class AuthService:
     @staticmethod
@@ -17,6 +17,14 @@ class AuthService:
         if not player or player.password != password:
             return None, "Invalid credentials", 401
 
-        access_token = create_access_token(identity=player.id)
+        access_token = create_access_token(identity=str(player.id))
+        refresh_token = create_refresh_token(identity=str(player.id))
         
-        return access_token, None, 200
+        return {
+            "access_token": access_token,
+            "player": {
+                "id": player.id,
+                "username": player.username,
+                "email": player.email
+            }
+        }, None, 200

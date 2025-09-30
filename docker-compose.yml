@@ -26,7 +26,7 @@ services:
       FLASK_APP: run.py
       FLASK_ENV: development
       FLASK_DEBUG: 1
-      MYSQL_HOST: db
+      MYSQL_HOST: ${MYSQL_HOST}
       MYSQL_PORT: ${MYSQL_PORT}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}

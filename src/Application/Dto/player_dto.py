@@ -4,7 +4,7 @@ from apiflask.validators import Length
 
 class PlayerRegisterSchema(Schema):
     id = String(dump_only=True)
-    nickname = String(required=True, validate=Length(1))
+    username = String(required=True, validate=Length(1))
     email = Email(required=True)
     password = String(required=True, validate=Length(min=6))
 
