@@ -72,7 +72,8 @@ class QuestionService:
                 theme = Theme.query.filter_by(id=question_data['theme_id']).first()
                 if not theme:
                     return None, "Theme not found"
-for field, value in question_data.items():
+                
+            for field, value in question_data.items():
                 if field != 'id' and hasattr(question, field):
                     setattr(question, field, value)
 

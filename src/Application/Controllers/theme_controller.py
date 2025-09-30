@@ -31,9 +31,7 @@ class ThemeController:
         themes = ThemeService.get_all_themes()
         if themes is None:
             return make_response(jsonify({"message": "Could not retrieve themes"}), 500)
-        return make_response(jsonify({
-            "themes": themes
-        }), 200)
+        return make_response(jsonify({"themes": themes}), 200)
 
     @staticmethod
     def get_theme_by_id(theme_id):

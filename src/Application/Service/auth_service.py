@@ -22,5 +22,9 @@ class AuthService:
         
         return {
             "access_token": access_token,
-            "refresh_token": refresh_token
+            "player": {
+                "id": player.id,
+                "username": player.username,
+                "email": player.email
+            }
         }, None, 200

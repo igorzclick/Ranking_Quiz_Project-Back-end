@@ -19,6 +19,5 @@ class AuthController:
 
         return make_response(jsonify({
             "message": "Login successful",
-            "access_token": result["access_token"],
-            "refresh_token": result["refresh_token"]
+            **result
         }), code)
