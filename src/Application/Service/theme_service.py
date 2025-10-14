@@ -98,7 +98,8 @@ class ThemeService:
             if not theme:
                 return None, "Theme not found"
 
-            db.session.delete(theme)
+            theme.is_active = False
+
             db.session.commit()
 
             return theme, None

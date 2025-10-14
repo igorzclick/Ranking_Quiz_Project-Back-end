@@ -122,7 +122,7 @@ class ThemeIntegratedController:
     @staticmethod
     def get_theme_integrated(theme_id):
         try:
-            theme = Theme.query.get(theme_id)
+            theme = Theme.query.filter_by(id=theme_id, is_active=True).first()
             if not theme:
                 return make_response(jsonify({"error": "Theme não encontrado"}), 404)
             
@@ -172,10 +172,10 @@ class ThemeIntegratedController:
     @staticmethod
     def _calculate_points_by_difficulty(difficulty):
         if difficulty == "easy":
-            return 5
-        elif difficulty == "medium":
             return 10
+        elif difficulty == "medium":
+            return 20
         elif difficulty == "hard":
-            return 15
+            return 30
         else:
-            return 5  # Valor padrão
+            return 10

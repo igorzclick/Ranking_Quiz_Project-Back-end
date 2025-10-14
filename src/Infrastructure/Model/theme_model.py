@@ -8,10 +8,6 @@ class Theme(db.Model):
     is_active = db.Column(db.Boolean, default=True)
     created_by = db.Column(db.Integer, db.ForeignKey('players.id'), nullable=False)
 
-    easy_points = db.Column(db.Integer, default=10)
-    medium_points = db.Column(db.Integer, default=20)
-    hard_points = db.Column(db.Integer, default=30)
-
     creator = db.relationship('Player', backref=db.backref('created_themes', lazy=True))
     questions = db.relationship('Question', back_populates='theme', lazy=True)
 
