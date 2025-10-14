@@ -8,7 +8,6 @@ class QuestionRegisterSchema(Schema):
     difficulty = String(required=True, validate=Length(min=1))
     theme_id = Integer(required=True)
     explanation = String(validate=Length(max=1000))
-    time_limit = Integer(load_default=60, validate=Range(min=10, max=300))
     points = Integer(validate=Range(min=1, max=100))
 
 class QuestionUpdateSchema(Schema):
@@ -17,7 +16,6 @@ class QuestionUpdateSchema(Schema):
     difficulty = String(validate=Length(min=1))
     theme_id = Integer()
     explanation = String(validate=Length(max=1000))
-    time_limit = Integer(validate=Range(min=10, max=300))
     points = Integer(validate=Range(min=1, max=100))
 
 question_schema = QuestionRegisterSchema()
