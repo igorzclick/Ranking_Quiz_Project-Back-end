@@ -67,13 +67,31 @@ def init_routes(app):
     
     @app.route('/theme/register', methods=['POST'])
     @jwt_required()
-    def register_theme():
+    def register_theme_with_questions():
         data = request.get_json()
-        errors = theme_schema.validate(data)
-        if errors:
-            return make_response(jsonify(errors), 400)
-        return ThemeController.register_theme(data)
+
+        try:
+            with db.session.begin():
+                theme = ThemeController.register_theme(data)
+
+                for question_data in data.get("questions", []):
+                    question_data["theme_id"] = theme.id
+                    question = QuestionController.register_question(question_data)
+
+                    for answer_data in question_data.get("answers", []):
+                        answer_data["question_id"] = question.id
+                        AnswerController.register_answer(answer_data)
+
+            return make_response(jsonify({
+                "message": "Theme registered successfully",
+                "theme_id": theme.id
+            }), 201)
+
+        except Exception as e:
+            db.session.rollback()
+            return make_response(jsonify({"message": str(e)}), 400)
     
+
     @app.route("/themes", methods=['GET'])
     @jwt_required()
     def get_all_themes():
@@ -103,15 +121,6 @@ def init_routes(app):
     @jwt_required()
     def delete_theme(theme_id):
         return ThemeController.delete_theme(theme_id)
-    
-    @app.route('/question/register', methods=['POST'])
-    @jwt_required()
-    def register_question():
-        data = request.get_json()
-        errors = question_schema.validate(data)
-        if errors:
-            return make_response(jsonify(errors), 400)
-        return QuestionController.register_question(data)
     
     @app.route("/questions", methods=['GET'])
     @jwt_required()
@@ -147,15 +156,6 @@ def init_routes(app):
     @jwt_required()
     def delete_question(question_id):
         return QuestionController.delete_question(question_id)
-    
-    @app.route('/answer/register', methods=['POST'])
-    @jwt_required()
-    def register_answer():
-        data = request.get_json()
-        errors = answer_schema.validate(data)
-        if errors:
-            return make_response(jsonify(errors), 400)
-        return AnswerController.register_answer(data)
     
     @app.route("/answers", methods=['GET'])
     @jwt_required()

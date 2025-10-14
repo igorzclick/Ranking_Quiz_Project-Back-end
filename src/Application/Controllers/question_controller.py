@@ -13,7 +13,6 @@ class QuestionController:
             difficulty=body['difficulty'],
             theme_id=body['theme_id'],
             explanation=body.get('explanation'),
-            time_limit=body.get('time_limit', 60),
             points=body.get('points')
         )
         question, error_message = QuestionService.create_question(question_domain)

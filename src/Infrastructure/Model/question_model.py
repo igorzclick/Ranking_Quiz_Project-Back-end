@@ -7,7 +7,6 @@ class Question(db.Model):
     difficulty = db.Column(db.String(20), nullable=False)  
     theme_id = db.Column(db.Integer, db.ForeignKey('themes.id'), nullable=False)
     explanation = db.Column(db.Text, nullable=True)
-    time_limit = db.Column(db.Integer, default=60)  
     points = db.Column(db.Integer, nullable=True)  
 
     theme = db.relationship('Theme', back_populates='questions')
@@ -21,7 +20,6 @@ class Question(db.Model):
             "difficulty": self.difficulty,
             "theme_id": self.theme_id,
             "explanation": self.explanation,
-            "time_limit": self.time_limit,
             "points": self.points,
             "answers": [answer.to_dict() for answer in self.answers] if self.answers else []
         }
