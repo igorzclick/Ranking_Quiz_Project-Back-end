@@ -18,9 +18,6 @@ class Theme(db.Model):
             "description": self.description,
             "is_active": self.is_active,
             "created_by": self.created_by,
-             "questions": [question.to_dict() for question in self.questions] if self.questions else [],
-            "easy_points": self.easy_points,
-            "medium_points": self.medium_points,
-            "hard_points": self.hard_points,
+            "questions": [question.to_dict() for question in self.questions] if self.questions else [],   
             "creator": self.creator.username if self.creator else None
         }

@@ -44,7 +44,7 @@ class ThemeService:
     @staticmethod
     def get_all_themes():
         try:
-            themes = Theme.query.all()        
+            themes = Theme.query.filter_by(is_active=True).all()    
             return [theme.to_dict() for theme in themes]
         except Exception as e:
             return None, str(e)
