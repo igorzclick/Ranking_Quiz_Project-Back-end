@@ -4,12 +4,14 @@ from src.Application.Controllers.player_controller import PlayerController
 from src.Application.Controllers.theme_controller import ThemeController
 from src.Application.Controllers.question_controller import QuestionController
 from src.Application.Controllers.answer_controller import AnswerController
+from src.Application.Controllers.theme_integrated_controller import ThemeIntegratedController
 from flask import jsonify, make_response, request
 from src.Application.Dto.player_dto import player_schema
 from src.Application.Dto.auth_dto import auth_schema
 from src.Application.Dto.theme_dto import theme_schema, theme_update_schema
 from src.Application.Dto.question_dto import question_schema, question_update_schema
 from src.Application.Dto.answer_dto import answer_schema, answer_update_schema
+from src.Application.Dto.theme_integrated_dto import theme_integrated_schema
 from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token
 from src.Infrastructure.Model.player_model import Player
 from src.config.data_base import db
@@ -20,6 +22,29 @@ def init_routes(app):
         return make_response(jsonify({
             "mensagem": "API - OK; Docker - Up",
         }), 200)
+        
+    @app.route('/theme/integrated', methods=['POST'])
+    @jwt_required()
+    def create_theme_integrated():
+        data = request.get_json()
+        errors = theme_integrated_schema.validate(data)
+        if errors:
+            return make_response(jsonify(errors), 400)
+        return ThemeIntegratedController.create_theme_integrated(data)
+        
+    @app.route('/theme/integrated/<int:theme_id>', methods=['PUT'])
+    @jwt_required()
+    def update_theme_integrated(theme_id):
+        data = request.get_json()
+        errors = theme_integrated_schema.validate(data)
+        if errors:
+            return make_response(jsonify(errors), 400)
+        return ThemeIntegratedController.update_theme_integrated(theme_id, data)
+        
+    @app.route('/theme/integrated/<int:theme_id>', methods=['GET'])
+    @jwt_required()
+    def get_theme_integrated(theme_id):
+        return ThemeIntegratedController.get_theme_integrated(theme_id)
     
     @app.route('/auth/login', methods=['POST'])
     def login():

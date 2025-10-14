@@ -4,7 +4,18 @@ from src.config.data_base import db
 
 class ThemeService:
     @staticmethod
+    def get_default_points(difficulty):
+        difficulty_points = {
+            'easy': 10,
+            'medium': 20,
+            'hard': 30
+        }
+
+        return difficulty_points.get(difficulty.lower(), 10)
+
+    @staticmethod
     def create_theme(theme):
+        
         new_theme = theme.to_dict()
         try:
         

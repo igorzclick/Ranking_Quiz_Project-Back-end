@@ -8,6 +8,10 @@ class Theme(db.Model):
     is_active = db.Column(db.Boolean, default=True)
     created_by = db.Column(db.Integer, db.ForeignKey('players.id'), nullable=False)
 
+    easy_points = db.Column(db.Integer, default=10)
+    medium_points = db.Column(db.Integer, default=20)
+    hard_points = db.Column(db.Integer, default=30)
+
     creator = db.relationship('Player', backref=db.backref('created_themes', lazy=True))
     questions = db.relationship('Question', back_populates='theme', lazy=True)
 
@@ -18,6 +22,9 @@ class Theme(db.Model):
             "description": self.description,
             "is_active": self.is_active,
             "created_by": self.created_by,
-            "creator": self.creator.username if self.creator else None,
-            "questions": [question.to_dict() for question in self.questions] if self.questions else []
+             "questions": [question.to_dict() for question in self.questions] if self.questions else [],
+            "easy_points": self.easy_points,
+            "medium_points": self.medium_points,
+            "hard_points": self.hard_points,
+            "creator": self.creator.username if self.creator else None
         }

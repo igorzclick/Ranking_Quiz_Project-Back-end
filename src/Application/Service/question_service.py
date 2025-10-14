@@ -1,3 +1,4 @@
+from src.Application.Service.theme_service import ThemeService
 from src.Infrastructure.Model.question_model import Question
 from src.Infrastructure.Model.theme_model import Theme
 from src.config.data_base import db
@@ -11,13 +12,14 @@ class QuestionService:
             if not theme:
                 return None, "Theme not found"
             
-            if not new_question.get('points'):
-                difficulty_points = {
-                    'easy': 10,
-                    'medium': 20,
-                    'hard': 30
-                }
-                new_question['points'] = difficulty_points.get(new_question['difficulty'].lower(), 10)
+            difficulty = new_question['difficulty'].lower()
+
+            points_map = {
+                'easy': getattr(theme, 'easy_points', None),
+                'medium': getattr(theme, 'medium_points', None),
+                'hard': getattr(theme, 'hard_points', None)
+            }
+            new_question['points'] = points_map.get(difficulty) or ThemeService.get_default_points(difficulty)
             
             question = Question(**new_question)
             db.session.add(question)
