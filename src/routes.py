@@ -14,6 +14,7 @@ from src.Application.Dto.answer_dto import answer_schema, answer_update_schema
 from src.Application.Dto.theme_integrated_dto import theme_integrated_schema
 from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token
 from src.Infrastructure.Model.player_model import Player
+from src.Application.Controllers.game_controller import GameController
 from src.config.data_base import db
 
 def init_routes(app):    
@@ -216,3 +217,50 @@ def init_routes(app):
     @jwt_required()
     def delete_answer(answer_id):
         return AnswerController.delete_answer(answer_id)
+
+
+    @app.route("/game/create", methods=['POST'])
+    # @jwt_required()
+    def create_game():
+        data = request.get_json()
+        return GameController.create_game(data)
+    @app.route("/games", methods=['GET'])
+    @jwt_required()
+    def get_all_games():
+        return GameController.get_all_games()
+    @app.route("/game/<int:game_id>", methods=['GET'])
+    @jwt_required()
+    def get_game_by_id(game_id):
+        return GameController.get_game_by_id(game_id)
+    @app.route("/game/<int:game_id>", methods=['PUT'])
+    @jwt_required()
+    def update_game(game_id):
+        data = request.get_json()
+        data['id'] = game_id
+        return GameController.update_game(data)
+    @app.route("/game/<int:game_id>", methods=['DELETE'])
+    @jwt_required()
+    def delete_game(game_id):
+        return GameController.delete_game(game_id)
+
+    @app.route("/games/player/<int:player_id>", methods=['GET'])
+    @jwt_required()
+    def get_games_by_player(player_id):
+        return GameController.get_games_by_player(player_id)
+
+    @app.route("/games/status/<string:status>", methods=['GET'])
+    @jwt_required()
+    def get_games_by_status(status):
+        return GameController.get_games_by_status(status)
+
+    @app.route("/games/theme/<int:theme_id>", methods=['GET'])
+    @jwt_required()
+    def get_games_by_theme(theme_id):
+        return GameController.get_games_by_theme(theme_id)
+
+    @app.route("/game/<int:game_id>/points", methods=['GET'])
+    @jwt_required()
+    def show_points(game_id):
+        return GameController.show_points(game_id)
+
+
