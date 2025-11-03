@@ -8,7 +8,7 @@ class GameController:
     def create_game(body):
         gameDomain = GameDomain(
             theme_id=body['theme_id'],
-            game_title=body['game_title'],
+            game_name=body['game_name'],
             player_id=body['player_id'],
             points=body['points'],
             status='inactive'
@@ -33,14 +33,11 @@ class GameController:
         }), 200)
 
     @staticmethod
-    def get_game_by_id(game_id):    
-        game, questions = GameService.get_game_by_id(game_id)
-        if not game:
-             return make_response(jsonify({"message": "Game not found"}), 404)
-        return make_response(jsonify({
-            "game": game,
-            "questions": questions
-        }), 200)
+    def get_game_by_id(game_id):
+        code, result = GameService.get_game_by_id(game_id)
+        if code != 200:
+             return make_response(jsonify(result), code)
+        return make_response(jsonify(result), 200)
 
     @staticmethod
     def update_game(body):

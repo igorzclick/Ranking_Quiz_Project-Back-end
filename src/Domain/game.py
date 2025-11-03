@@ -1,7 +1,7 @@
 class GameDomain:
-    def __init__(self, theme_id, game_title, player_id,points,status):
+    def __init__(self, theme_id, game_name, player_id,points,status):
         self.theme_id = theme_id
-        self.game_title = game_title
+        self.game_name = game_name
         self.player_id = player_id
         self.status = status
         self.points = points
@@ -9,7 +9,7 @@ class GameDomain:
     def to_dict(self):
         return {
             "theme_id": self.theme_id,
-            "game_title": self.game_title,
+            "game_name": self.game_name,
             "player_id": self.player_id,
             "status": self.status,
             "points": self.points

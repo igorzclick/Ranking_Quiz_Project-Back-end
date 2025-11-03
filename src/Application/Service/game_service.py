@@ -1,8 +1,7 @@
 from src.config.data_base import db
 from src.Infrastructure.Model.game_model import Game
 from src.Infrastructure.Model.theme_model import Theme
-from src.Application.Controllers.theme_integrated_controller import ThemeIntegratedController
-
+from src.Application.Service.theme_service import ThemeService
 class GameService:
     @staticmethod
     def create_game(game):
@@ -24,12 +23,17 @@ class GameService:
             return None, str(e)
 
     @staticmethod
-    def get_game_by_id(id):
+    def get_game_by_id(game_id):
         try:
-            game = Game.query.filter_by(id=id).first()
+            game = Game.query.filter_by(id=game_id).first()
             game_dict = game.to_dict()
-            questions = ThemeIntegratedController.get_theme_integrated(game_dict['theme_id'])
-            return game_dict, questions if game else (None, None)
+            theme_dict = ThemeService.get_theme_integrated(game_dict['theme_id'])
+
+            result = {
+                "game": game_dict,
+                "theme": theme_dict
+            }
+            return 200, result if game else (404, {"message": "Game not found"})
         except Exception as e:
             return None, str(e)
 
@@ -101,9 +105,11 @@ class GameService:
     def show_points(game_id,):
         try:
             game = Game.query.filter_by(id=game_id).first()        
-            if game:
-                return game.points
-            return None
+            if not game:
+                return None, 'Game not found' 
+            else:
+                return game.to_dict()['points'], None
+                
         except Exception as e:
             return None, str(e)
             

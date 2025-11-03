@@ -1,5 +1,7 @@
 from src.Infrastructure.Model.theme_model import Theme
 from src.Infrastructure.Model.player_model import Player
+from src.Infrastructure.Model.question_model import Question
+from src.Infrastructure.Model.answer_model import Answer
 from src.config.data_base import db
 
 class ThemeService:
@@ -106,3 +108,47 @@ class ThemeService:
         except Exception as e:
             db.session.rollback()
             return None, str(e)
+
+    def get_theme_integrated(theme_id):
+        theme = Theme.query.filter_by(id=theme_id, is_active=True).first()
+        if not theme:
+            return make_response(jsonify({"error": "Theme não encontrado"}), 404)
+        
+        questions = Question.query.filter_by(theme_id=theme_id).all()
+        
+        result = {
+            "id": theme.id,
+            "name": theme.name,
+            "description": theme.description,
+            "is_active": theme.is_active,
+            "created_by": theme.created_by,
+            "created_at": theme.created_at.isoformat() if hasattr(theme, 'created_at') else None,
+            "updated_at": theme.updated_at.isoformat() if hasattr(theme, 'updated_at') else None,
+            "questions": []
+        }
+        
+        for question in questions:
+            answers = Answer.query.filter_by(question_id=question.id).all()
+            
+            question_data = {
+                "id": question.id,
+                "text": question.text,
+                "difficulty": question.difficulty,
+                "explanation": question.explanation,
+                "points": question.points,
+                "answers": []
+            }
+            
+            for answer in answers:
+                answer_data = {
+                    "id": answer.id,
+                    "text": answer.text,
+                    "is_correct": answer.is_correct,
+                    "order": answer.order
+                }
+                question_data["answers"].append(answer_data)
+            
+            result["questions"].append(question_data)
+
+        return result
+        
