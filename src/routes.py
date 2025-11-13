@@ -265,4 +265,29 @@ def init_routes(app):
     def show_points(game_id):
         return GameController.show_points(game_id)
 
+    @app.route("/game/<int:game_id>/start", methods=['POST'])
+    @jwt_required()
+    def start_game_and_get_question(game_id):
+        player_id = get_jwt_identity()
+        return GameController.start_game_and_get_question(game_id, player_id)
+    
+    @app.route("/game/<int:game_id>/question/<int:question_index>", methods=['GET'])
+    @jwt_required()
+    def get_current_question(game_id, question_index):
+        player_id = get_jwt_identity()
+        return GameController.get_current_question(game_id, question_index, player_id)
+    
+    @app.route("/game/<int:game_id>/answer", methods=['POST'])
+    @jwt_required()
+    def submit_answer(game_id):
+        player_id = get_jwt_identity()
+        data = request.get_json()
+        return GameController.submit_answer(game_id, data, player_id)
+    
+    @app.route("/game/<int:game_id>/finish", methods=['POST'])
+    @jwt_required()
+    def finish_game(game_id):
+        player_id = get_jwt_identity()
+        return GameController.finish_game(game_id, player_id)
+
 
