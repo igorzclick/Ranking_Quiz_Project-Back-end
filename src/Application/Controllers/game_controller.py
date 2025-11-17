@@ -108,3 +108,35 @@ class GameController:
             "points": points
         }), 200)
 
+    @staticmethod
+    def start_game(game_id):
+        game, error_message = GameService.start_game(game_id)
+        if error_message:
+            return make_response(jsonify({"message": error_message}), 400)
+        return make_response(jsonify({
+            "game": game.to_dict()
+        }), 200)
+
+    @staticmethod
+    def play_turn(game_id, data):
+        required_fields = ["question_id", "answer_id"]
+        for field in required_fields:
+            if field not in data:
+                return make_response(jsonify({"message": f"Missing field: {field}"}), 400)
+
+        result, error_message = GameService.submit_answer(
+            game_id=game_id,
+            question_id=data["question_id"],
+            answer_id=data["answer_id"],
+        )
+        if error_message:
+            return make_response(jsonify({"message": error_message}), 400)
+        return make_response(jsonify(result), 200)
+
+    @staticmethod
+    def finish_game(game_id):
+        result, error_message = GameService.finish_game(game_id)
+        if error_message:
+            return make_response(jsonify({"message": error_message}), 400)
+        return make_response(jsonify(result), 200)
+

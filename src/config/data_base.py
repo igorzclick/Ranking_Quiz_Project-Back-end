@@ -22,6 +22,8 @@ def init_db(app):
     from src.Infrastructure.Model.question_model import Question
     from src.Infrastructure.Model.answer_model import Answer
     from src.Infrastructure.Model.room_model import Room
+    from src.Infrastructure.Model.game_model import Game
+    from src.Infrastructure.Model.game_answer_model import GameAnswer
 
     with app.app_context():
         db.create_all()

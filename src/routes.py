@@ -265,4 +265,21 @@ def init_routes(app):
     def show_points(game_id):
         return GameController.show_points(game_id)
 
+    # Gameplay endpoints
+    @app.route("/game/<int:game_id>/start", methods=['POST'])
+    @jwt_required()
+    def start_game(game_id):
+        return GameController.start_game(game_id)
+
+    @app.route("/game/<int:game_id>/play", methods=['POST'])
+    @jwt_required()
+    def play_turn(game_id):
+        data = request.get_json()
+        return GameController.play_turn(game_id, data)
+
+    @app.route("/game/<int:game_id>/finish", methods=['POST'])
+    @jwt_required()
+    def finish_game(game_id):
+        return GameController.finish_game(game_id)
+
 

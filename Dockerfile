@@ -16,5 +16,6 @@ COPY . .
 EXPOSE 5000
 
 ENV FLASK_RUN_HOST=0.0.0.0
+ENV PYTHONPATH=/src
 
 CMD ["flask", "run"]
